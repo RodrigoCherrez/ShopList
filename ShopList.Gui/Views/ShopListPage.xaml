@@ -55,7 +55,7 @@
                 Grid.Column="2"
                 Text="+"
                 FontSize="Medium"
-                Command="{Binding AgregarShopListItemCommand}"/>
+                Command="{Binding EliminarShopListItemCommand}"/>
             <Button
                 Grid.Row="1"
                 Grid.Column="2"
@@ -68,6 +68,7 @@
             Grid.Row="1"
             Grid.Column="0"
             ItemsSource="{Binding Items}"
+            SelectedItem="{Binding OrigenSelecionado}"
             EmptyView="Aun no se han registrado Productos"
             BackgroundColor="Green">
 

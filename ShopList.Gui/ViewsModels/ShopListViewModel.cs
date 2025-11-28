@@ -1,4 +1,6 @@
-﻿using ShopList.Gui.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using ShopList.Gui.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,51 +13,65 @@ using System.Windows.Input;
 namespace ShopList.Gui.ViewModels
 {
     public class ShopListViewModel :INotifyPropertyChanged
+        public partial class ShopListViewModel : ObservableObject
+    /*:INotifyPropertyChanged*/
     {
-        //variabe de instancia
+        [ObservableProperty]
         private string _nombreDelArticulo = string.Empty;
+        [ObservableProperty]
         private int _cantidadAComprar = 1;
-
-        public event PropertyChangedEventHandler? PropertyChanged;
+        [ObservableProperty]
+        private Item? _origenSeleccionado = null;
+        //   public event PropertyChangedEventHandler? PropertyChanged;
 
         public ObservableCollection<Item> Items { get; }
-        public string NombreDelArticulo
-        {
-            get => _nombreDelArticulo;
-            set
-            {
-                if (value != _nombreDelArticulo)
-                {
-                    _nombreDelArticulo = value;
-                    OnPropertyChanged(nameof(NombreDelArticulo));
-                }
-            }
-        }
+      //  public string NombreDelArticulo
+        //{
+          //  get => _nombreDelArticulo;
+            //set
+           // {
+            //    if (value != _nombreDelArticulo)
+              //  {
+                //    _nombreDelArticulo = value;
+                  //  OnPropertyChanged(nameof(NombreDelArticulo));
+           //     }
+           // }
+       // }
 
-        public int CantidadAComprar
-        {
-            get => _cantidadAComprar;
-            set
-            {
-                if (value != _cantidadAComprar)
-                {
-                    _cantidadAComprar = value;
-                    OnPropertyChanged(nameof(CantidadAComprar));
-                }
-            }
-        }
+     //   public int CantidadAComprar
+       // {
+         //   get => _cantidadAComprar;
+          //  set
+           // {
+             //   if (value != _cantidadAComprar)
+               // {
+               //     _cantidadAComprar = value;
+                //    OnPropertyChanged(nameof(CantidadAComprar));
+               // }
+           // }
+      //  }
 
-        public ICommand AgregarShopListItemCommand {  get; private set; }
+        //public ICommand AgregarShopListItemCommand {  get; private set; }
 
             public ShopListViewModel()
         {
             Items = new ObservableCollection<Item>();
             CargarDatos();
-            AgregarShopListItemCommand = new Command(AgregarShopListItem);
+            //    AgregarShopListItemCommand = new Command(AgregarShopListItem);
         }
-        
-        public void AgregarShopListItem()
-        {
+        [RelayCommand]
+          if (Items.Count > 0)
+            {
+                OrigenSeleccionado = Items[0];
+            }
+
+            else {
+               OrigenSeleccionado = null!;
+            
+            }
+
+            public void AgregarShopListItem()
+   {
             if(string.IsNullOrEmpty(_nombreDelArticulo) || CantidadAComprar <= 0)
             {
                 return;
@@ -74,12 +90,37 @@ namespace ShopList.Gui.ViewModels
             CantidadAComprar = 1;
         }
 
-        public void EliminarShopListItem()
+[RelayCommand]
+public void EliminarShopListItem()
+        {
+    if (OrigenSeleccionado == null) { return; }
+    Item? nuevoSeleccionado;
+    int indice = Items.IndexOf(OrigenSeleccionado);
+    if (indice < Items.Count - 1)
+    {
+
+        nuevoSeleccionado = Items[indice + 1];
+    }
+    else
+    {
+        if (Items.Count > 1)
         {
 
+            nuevoSeleccionado = Items[Items.Count - 2];
+
+        }
+        else
+        {
+            nuevoSeleccionado = null;
         }
 
-        private void CargarDatos()
+
+    }
+    Items.Remove(OrigenSeleccionado);
+    OrigenSeleccionado = nuevoSeleccionado;
+}
+[RelayCommand]
+private void CargarDatos()
         {
             Items.Add(new Item()
             {
@@ -108,11 +149,11 @@ namespace ShopList.Gui.ViewModels
             });
         }
 
-        private void OnPropertyChanged(string propertyName)
-        {
-           PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+      //  private void OnPropertyChanged(string propertyName)
+        //{
+          // PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        }
+      //  }
 
 
     }
