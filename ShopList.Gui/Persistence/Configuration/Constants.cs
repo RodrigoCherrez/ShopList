@@ -7,17 +7,19 @@ using System.Threading.Tasks;
 
 namespace ShopList.Gui.Persistence.Configuration
 {
-    public static class Constants
+
+
+    public static class Constants 
     {
         public static string DataBasePath =>
             Path.Combine(
                 FileSystem.AppDataDirectory,
-                DatabaseFileName );
+                DatabaseFileName);
         public const string DatabaseFileName = "Shoplist.db3";
 
-        public  const SQLite.SQLiteOpenFlags Flags =
+        public const SQLite.SQLiteOpenFlags Flags =
             SQLite.SQLiteOpenFlags.ReadWrite |
-            SQLite.SQLiteOpenFlags.Create   |
+            SQLite.SQLiteOpenFlags.Create |
             SQLite.SQLiteOpenFlags.SharedCache;
 
     }
