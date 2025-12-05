@@ -44,5 +44,6 @@ namespace ShopList.Gui.Models.Configuration
             await InitAsync();
             return await _connection!.DeleteAsync(item);
         }
+
     }
 }
